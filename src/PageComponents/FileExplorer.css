@@ -1,0 +1,38 @@
+
+.file-viewer-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.file-viewer-container > .listing{
+    cursor: pointer;
+    flex: 1 1 25%;
+    background-color: #EAEAEA;
+    height: 100vh;
+}
+
+
+.file-viewer-container > .viewer{
+    flex:1 1 75%;
+}
+
+.file-viewer-container > .listing  li{
+    cursor: pointer;
+    padding: 0 10px;
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+.file-viewer-container > .listing  li.active{
+    background-color: #4f7ae0;
+}
+
+.file-viewer-container > .listing  li.active p{
+    color: #FFFFFF
+}
+
+.file-viewer-container > .listing  li::after{
+    border-bottom: 1px solid #AAAAAA;
+    content: "";
+    display: block;
+}
