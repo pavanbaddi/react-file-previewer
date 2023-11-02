@@ -8,6 +8,7 @@ import { RotateBackwardIcon, RotateForwardIcon } from '@react-pdf-viewer/rotate'
 import { thumbnailPlugin } from '@react-pdf-viewer/thumbnail';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
+import { printPlugin } from '@react-pdf-viewer/print';
 
 import Thumbnail from "./ExtentedPdfComponents/Thumbnail";
 import EnableOptions from "./ExtentedPdfComponents/EnableOptions";
@@ -32,6 +33,7 @@ export default function PdfViewer({ url }) {
     const getFilePluginInstance = getFilePlugin();
     const thumbnailPluginInstance = thumbnailPlugin();
     const zoomPlugin = getZoomPlugin({store});
+    const printPluginInstance = printPlugin();
     
     const defaultLayoutPluginInstance = defaultLayoutPlugin({
         renderToolbar
@@ -45,7 +47,7 @@ export default function PdfViewer({ url }) {
         "enable_thumbnail": false,
         "enable_default_layout": true,
         "enable_download": true,
-        "enable_print": false,
+        "enable_print": true,
         "enable_reading_progress": true,
         "enable_zoom_level" : true,
         "zoom_level_config" : {
@@ -78,6 +80,10 @@ export default function PdfViewer({ url }) {
 
         if (features.enable_zoom_level) {
             tempPlugins.push(zoomPlugin)
+        }
+
+        if (features.enable_print) {
+            tempPlugins.push(printPluginInstance)
         }
 
         setPlugins(tempPlugins)
@@ -148,7 +154,7 @@ export default function PdfViewer({ url }) {
     const defaultScale = initialZoomLevel()
 
     return <>
-        <EnableOptions zoomPlugin={zoomPlugin} features={features} setFeatures={setFeatures} />
+        <EnableOptions printPlugin={printPluginInstance} zoomPlugin={zoomPlugin} features={features} setFeatures={setFeatures} />
 
         <DownloadButton enabled={features.enable_download} pluginInstance={getFilePluginInstance} />
 
