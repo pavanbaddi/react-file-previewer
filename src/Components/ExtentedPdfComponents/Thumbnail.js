@@ -1,7 +1,4 @@
 import React from "react";
-import { MinimalButton, Position, RotateDirection, Tooltip, Viewer, Worker } from '@react-pdf-viewer/core';
-import { thumbnailPlugin } from '@react-pdf-viewer/thumbnail';
-
 
 export default function Thumbnail({ enabled, Thumbnails, children }) {
     

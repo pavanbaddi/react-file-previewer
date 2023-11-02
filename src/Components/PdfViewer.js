@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { MinimalButton, Position, RotateDirection, Tooltip, Viewer, Worker, createStore, Plugin, PluginFunctions } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
@@ -14,6 +14,7 @@ import EnableOptions from "./ExtentedPdfComponents/EnableOptions";
 import DownloadButton from "./ExtentedPdfComponents/DownloadButton";
 
 import readingProgress from "../Lib/Pdf/Plugins/readingProgess";
+import { PdfContext } from "../Contexts/PdfContext";
 
 const pdfVersion = "3.11.174"
 const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`
@@ -21,11 +22,17 @@ const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion
 const TOOLTIP_OFFSET = { left: 0, top: 8 };
 
 export default function PdfViewer({ url }) {
-    const readingProgressPluginInstance = readingProgress()
-    const thumbnailPluginInstance = thumbnailPlugin();
-    const defaultLayoutPluginInstance = defaultLayoutPlugin();
-    const getFilePluginInstance = getFilePlugin();
+    const {getStore} = useContext(PdfContext)
 
+    const readingProgressPluginInstance = readingProgress({store : getStore()})
+    const { renderToolbar } = readingProgressPluginInstance;
+    
+    const getFilePluginInstance = getFilePlugin();
+    const thumbnailPluginInstance = thumbnailPlugin();
+    
+    const defaultLayoutPluginInstance = defaultLayoutPlugin({
+        renderToolbar
+    });
     const { Thumbnails } = thumbnailPluginInstance;
 
     const [plugins, setPlugins] = useState([])
@@ -36,12 +43,11 @@ export default function PdfViewer({ url }) {
         "enable_default_layout": true,
         "enable_download": true,
         "enable_print": false,
-        "enable_reading_progress": false,
+        "enable_reading_progress": true,
     });
 
     useEffect(() => {
         initPlugins();
-        console.log("features", features)
     }, [features])
 
     const initPlugins = useCallback(() => {

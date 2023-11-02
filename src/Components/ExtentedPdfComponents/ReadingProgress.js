@@ -1,13 +1,12 @@
-import React, {useState, useLayoutEffect}  from "react";
-import { Store } from '@react-pdf-viewer/core';
+import React, { useState, useLayoutEffect } from "react";
 
-export default function ReadingProgress({store}) {
+export default function ReadingProgress({ store, children }) {
     const [percentages, setPercentages] = useState(0);
 
     const handleScroll = (event) => {
         const target = event.target;
-        if(target instanceof HTMLElement){
-            const progress = Math.floor((100*target.scrollTop)/(target.scrollHeight-target.clientHeight));
+        if (target instanceof HTMLElement) {
+            const progress = Math.floor((100 * target.scrollTop) / (target.scrollHeight - target.clientHeight));
             setPercentages(progress)
         }
     }
@@ -28,18 +27,32 @@ export default function ReadingProgress({store}) {
     }, []);
 
     return (
-        <div
-            style={{
-                height: '4px',
-            }}
-        >
+        <>
+            {children}
+
             <div
                 style={{
-                    backgroundColor: 'rgb(53, 126, 221)',
-                    height: '100%',
-                    width: `${percentages}%`,
+                    bottom: '-0.25rem',
+                    position: 'absolute',
+                    left: 0,
+                    width: '100%',
                 }}
-            />
-        </div>
+            >
+                <div
+                    style={{
+                        height: '4px',
+                    }}
+                >
+                    <div
+                        style={{
+                            backgroundColor: 'rgb(53, 126, 221)',
+                            height: '100%',
+                            width: `${percentages}%`,
+                        }}
+                    />
+                </div>
+            </div>
+        </>
+
     );
 }
