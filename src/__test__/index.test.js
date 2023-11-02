@@ -1,6 +1,6 @@
 import React from "react";
-import {render, screen} from "@testing-library/react";
-import user from "@testing-library/user-event";
+import {render, screen, fireEvent} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import PdfContextProvider from "../Contexts/PdfContext";
 import App from "../App";
 import pdfbase64 from "./utils/pdfbase64";
@@ -17,7 +17,6 @@ const Component = ( {children} ) => {
     )
 }
 
-
 it("must render", () => {
     render(<Component ><App/></Component>)
     const fileInput = screen.getByTestId("file-input");
@@ -26,14 +25,7 @@ it("must render", () => {
 
 it("before uploading any file", () => {
     render(<Component ><App/></Component>)
-    let listing = null;
-    
-    try {
-        listing = screen.getByTestId("listing")
-    } catch (error) {
-        
-    }
-    
+    let listing = screen.queryByTestId("listing")    
     expect(listing).not.toBeInTheDocument()
 })
 
@@ -53,10 +45,8 @@ afterEach(() => {
 it("upload a pdf file", () => {
     global.URL.createObjectURL = jest.fn((file) => "")
 
-    act(() => {
-        ReactDOM.createRoot(container).render(<Component ><App/></Component>)
-    });
-
+    render(<Component ><App/></Component>)
+    
     const fileInput = screen.getByTestId("file-input");
 
     const blobOptions= {type: "application/pdf"};
@@ -65,10 +55,9 @@ it("upload a pdf file", () => {
     File.prototype.text = jest.fn().mockResolvedValueOnce(pdfbase64)
     
     act(() => {
-        user.upload(fileInput, pdfFile)
-    });
-
-    const listing = screen.getByTestId("listing")
+        userEvent.upload(fileInput, pdfFile);
+    })
     
+    const listing = screen.queryByTestId("listing")
     expect(listing.childElementCount).toEqual(1);
 })
