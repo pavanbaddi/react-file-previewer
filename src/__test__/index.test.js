@@ -4,6 +4,8 @@ import user from "@testing-library/user-event";
 import PdfContextProvider from "../Contexts/PdfContext";
 import App from "../App";
 import pdfbase64 from "./utils/pdfbase64";
+import {act} from "react-dom/test-utils"
+import ReactDOM from "react-dom/client"
 
 const Component = ( {children} ) => {
     return (
@@ -15,15 +17,58 @@ const Component = ( {children} ) => {
     )
 }
 
-it("must render", async() => {
-    global.URL.createObjectURL = jest.fn((file) => "")
+
+it("must render", () => {
     render(<Component ><App/></Component>)
+    const fileInput = screen.getByTestId("file-input");
+    expect(fileInput).toBeInTheDocument()
+})
+
+it("before uploading any file", () => {
+    render(<Component ><App/></Component>)
+    let listing = null;
+    
+    try {
+        listing = screen.getByTestId("listing")
+    } catch (error) {
+        
+    }
+    
+    expect(listing).not.toBeInTheDocument()
+})
+
+
+let container = null;
+
+beforeEach(() => {
+    container = document.createElement("div")
+    document.body.appendChild(container)
+})
+
+afterEach(() => {
+    document.body.removeChild(container);
+    container = null;
+  });
+
+it("upload a pdf file", () => {
+    global.URL.createObjectURL = jest.fn((file) => "")
+
+    act(() => {
+        ReactDOM.createRoot(container).render(<Component ><App/></Component>)
+    });
+
+    const fileInput = screen.getByTestId("file-input");
+
     const blobOptions= {type: "application/pdf"};
     const pdfBlob = new Blob([pdfbase64], blobOptions )
     const pdfFile = new File([pdfBlob], "test-pdf.pdf", {type: "application/pdf"})
     File.prototype.text = jest.fn().mockResolvedValueOnce(pdfbase64)
-    const fileInput = screen.getByTestId("file-input");
-    user.upload(fileInput, pdfFile)
+    
+    act(() => {
+        user.upload(fileInput, pdfFile)
+    });
+
     const listing = screen.getByTestId("listing")
-    expect(listing).toBeInTheDocument();
+    
+    expect(listing.childElementCount).toEqual(1);
 })
