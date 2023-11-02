@@ -7,7 +7,7 @@ export default function FileExplorer({files, prevFile, prevChoosenFile}) {
           <div className='file-viewer-container' >
             <div className='listing' >
                 <h4>List of Selected Files</h4>
-                <ul>
+                <ul data-testid="listing" >
                   {files.map((file, index) => {
                     const {file : uploadedFile, url} = file;
                     const isActive = prevFile === file

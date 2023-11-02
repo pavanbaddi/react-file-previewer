@@ -16,7 +16,6 @@ function App() {
         tempFiles.push({file, url: URL.createObjectURL(file)})
       }
     }
-
     setFiles(tempFiles)
     element.value = "";
   }
@@ -25,7 +24,6 @@ function App() {
     setPrevFile(file)
   }
 
-  console.log("prevFile", prevFile)
 
   return (
     <div>
@@ -33,7 +31,7 @@ function App() {
         <div>
           <label>File Uploader</label>
         </div>
-        <input type='file' onChange={onHandleFileChanges} multiple/>
+        <input data-testid="file-input" type='file' onChange={onHandleFileChanges} multiple/>
       </div>
 
 
