@@ -7,8 +7,12 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { RotateBackwardIcon, RotateForwardIcon } from '@react-pdf-viewer/rotate';
 import { thumbnailPlugin } from '@react-pdf-viewer/thumbnail';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import { getFilePlugin } from '@react-pdf-viewer/get-file';
+
 import Thumbnail from "./ExtentedPdfComponents/Thumbnail";
 import EnableOptions from "./ExtentedPdfComponents/EnableOptions";
+import DownloadButton from "./ExtentedPdfComponents/DownloadButton";
+
 import readingProgress from "../Lib/Pdf/Plugins/readingProgess";
 
 const pdfVersion = "3.11.174"
@@ -19,16 +23,18 @@ const TOOLTIP_OFFSET = { left: 0, top: 8 };
 export default function PdfViewer({ url }) {
     const readingProgressPluginInstance = readingProgress()
     const thumbnailPluginInstance = thumbnailPlugin();
-    const { Thumbnails } = thumbnailPluginInstance;
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
+    const getFilePluginInstance = getFilePlugin();
+
+    const { Thumbnails } = thumbnailPluginInstance;
 
     const [plugins, setPlugins] = useState([])
 
     const [features, setFeatures] = useState({
         "enable_rotation": false,
         "enable_thumbnail": false,
-        "enable_default_layout": false,
-        "enable_download": false,
+        "enable_default_layout": true,
+        "enable_download": true,
         "enable_print": false,
         "enable_reading_progress": false,
     });
@@ -51,6 +57,10 @@ export default function PdfViewer({ url }) {
 
         if (features.enable_reading_progress) {
             tempPlugins.push(readingProgressPluginInstance)
+        }
+
+        if (features.enable_download) {
+            tempPlugins.push(getFilePluginInstance)
         }
 
         setPlugins(tempPlugins)
@@ -111,6 +121,9 @@ export default function PdfViewer({ url }) {
 
     return <>
         <EnableOptions features={features} setFeatures={setFeatures} />
+
+        <DownloadButton enabled={features.enable_download} pluginInstance={getFilePluginInstance} />
+
         <Thumbnail enabled={features.enable_thumbnail} Thumbnails={Thumbnails} >
             <Worker workerUrl={pdfWorkerUrl} >
                 <Viewer

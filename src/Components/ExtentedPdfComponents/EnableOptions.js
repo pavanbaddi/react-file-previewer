@@ -29,6 +29,13 @@ export default function EnableOptions({features, setFeatures}) {
                 return <button type="button" onClick={() => setFeatures({...features, [keyName]: !features[keyName]})} > {features[keyName] ? `Disable`: `Enable`} Reading Progress</button>
             }   
         },
+        {
+            "title" : "Enable Download",
+            "render" : () => {
+                const keyName = "enable_download"
+                return <button type="button" onClick={() => setFeatures({...features, [keyName]: !features[keyName]})} > {features[keyName] ? `Disable`: `Enable`} Download</button>
+            }   
+        },
     ] 
 
     return <div>
@@ -37,7 +44,9 @@ export default function EnableOptions({features, setFeatures}) {
             </div>
             {
                 Options.map((option, index)=>{
-                    return option.render()
+                    return <React.Fragment key={index} >
+                        {option.render()}
+                    </React.Fragment>
                 })
             }
     </div>
