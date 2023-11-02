@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { MinimalButton, Position, RotateDirection, Tooltip, Viewer, Worker, createStore, Plugin, PluginFunctions } from '@react-pdf-viewer/core';
+import { MinimalButton, Position, RotateDirection, Tooltip, Viewer, Worker, SpecialZoomLevel  } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
@@ -15,6 +15,7 @@ import DownloadButton from "./ExtentedPdfComponents/DownloadButton";
 
 import readingProgress from "../Lib/Pdf/Plugins/readingProgess";
 import { PdfContext } from "../Contexts/PdfContext";
+import getZoomPlugin from "../Lib/Pdf/Plugins/zoomPlugin";
 
 const pdfVersion = "3.11.174"
 const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`
@@ -23,12 +24,14 @@ const TOOLTIP_OFFSET = { left: 0, top: 8 };
 
 export default function PdfViewer({ url }) {
     const {getStore} = useContext(PdfContext)
+    const store = getStore()
 
-    const readingProgressPluginInstance = readingProgress({store : getStore()})
+    const readingProgressPluginInstance = readingProgress({store})
     const { renderToolbar } = readingProgressPluginInstance;
     
     const getFilePluginInstance = getFilePlugin();
     const thumbnailPluginInstance = thumbnailPlugin();
+    const zoomPlugin = getZoomPlugin({store});
     
     const defaultLayoutPluginInstance = defaultLayoutPlugin({
         renderToolbar
@@ -44,6 +47,10 @@ export default function PdfViewer({ url }) {
         "enable_download": true,
         "enable_print": false,
         "enable_reading_progress": true,
+        "enable_zoom_level" : true,
+        "zoom_level_config" : {
+            "zoomLevel" : SpecialZoomLevel.ActualSize
+        }
     });
 
     useEffect(() => {
@@ -69,9 +76,22 @@ export default function PdfViewer({ url }) {
             tempPlugins.push(getFilePluginInstance)
         }
 
+        if (features.enable_zoom_level) {
+            tempPlugins.push(zoomPlugin)
+        }
+
         setPlugins(tempPlugins)
 
     }, [features])
+
+    const initialZoomLevel = useCallback(() => {
+        let val = 1
+
+        if(features.enable_zoom_level && features.zoom_level_config.zoomLevel){ 
+            val = features.zoom_level_config.zoomLevel
+        }
+        return val;
+    },[])
 
     const renderPage = (props) => {
 
@@ -125,15 +145,17 @@ export default function PdfViewer({ url }) {
         </>
     }
 
+    const defaultScale = initialZoomLevel()
+
     return <>
-        <EnableOptions features={features} setFeatures={setFeatures} />
+        <EnableOptions zoomPlugin={zoomPlugin} features={features} setFeatures={setFeatures} />
 
         <DownloadButton enabled={features.enable_download} pluginInstance={getFilePluginInstance} />
 
         <Thumbnail enabled={features.enable_thumbnail} Thumbnails={Thumbnails} >
             <Worker workerUrl={pdfWorkerUrl} >
                 <Viewer
-                    defaultScale={0.5}
+                    defaultScale={defaultScale}
                     plugins={plugins}
                     renderPage={renderPage}
                     fileUrl={url}

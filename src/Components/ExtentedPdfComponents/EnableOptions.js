@@ -1,6 +1,7 @@
 import React  from "react";
+import ZoomLevelFields from "./ZoomLevelFields";
 
-export default function EnableOptions({features, setFeatures}) {
+export default function EnableOptions({zoomPlugin, features, setFeatures}) {
 
     const Options = [
         {
@@ -34,6 +35,27 @@ export default function EnableOptions({features, setFeatures}) {
             "render" : () => {
                 const keyName = "enable_download"
                 return <button type="button" onClick={() => setFeatures({...features, [keyName]: !features[keyName]})} > {features[keyName] ? `Disable`: `Enable`} Download</button>
+            }   
+        },
+        {
+            "title" : "Enable Zoom Level",
+            "render" : () => {
+                const keyName = "enable_zoom_level"
+                const isEnabled = features[keyName]
+                return (
+                    <>
+                        <button type="button" onClick={() => setFeatures({...features, [keyName]: !features[keyName]})} > {features[keyName] ? `Disable`: `Enable`} Zoom Level</button>
+                        {
+                            isEnabled ? <ZoomLevelFields initial={features.zoom_level_config.zoomLevel} onChange={(val) => {
+                                if(!isNaN(val)){
+                                    val = Number(val)
+                                }
+                                setFeatures({...features, zoom_level_config: {...features.zoom_level_config, zoomLevel:val}})
+                                zoomPlugin.zoomTo(val);
+                            } } /> : null
+                        }
+                    </>
+                )
             }   
         },
     ] 
