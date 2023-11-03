@@ -69,3 +69,9 @@ describe("test upload journey", () => {
     })
 })
 
+
+it("test snapshot 1", () => {
+    const result = render(<Component><App/></Component>)
+    const {container} = result
+    expect(container).toMatchSnapshot()
+})

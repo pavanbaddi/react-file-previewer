@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test snapshot 1 1`] = `
+<div>
+  <div>
+    <div
+      class="form-container"
+    >
+      <div>
+        <label>
+          File Uploader
+        </label>
+      </div>
+      <input
+        data-testid="file-input"
+        multiple=""
+        type="file"
+      />
+    </div>
+  </div>
+</div>
+`;
