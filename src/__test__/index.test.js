@@ -41,7 +41,7 @@ describe("test upload journey", () => {
             disconnect
         }));
         
-        render(<Component ><App/></Component>)
+        const {container} = render(<Component ><App/></Component>)
 
         const blobOptions= {type: "application/pdf"};
         const pdfBlob = new Blob([pdfbase64], blobOptions )
@@ -66,12 +66,6 @@ describe("test upload journey", () => {
         
         const viewer = await screen.findByTestId("viewer")
         expect(viewer.childElementCount).toBeGreaterThanOrEqual(1)
+        expect(container).toMatchSnapshot()
     })
-})
-
-
-it("test snapshot 1", () => {
-    const result = render(<Component><App/></Component>)
-    const {container} = result
-    expect(container).toMatchSnapshot()
 })

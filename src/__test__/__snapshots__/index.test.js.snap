@@ -20,3 +20,161 @@ exports[`test snapshot 1 1`] = `
   </div>
 </div>
 `;
+
+exports[`test upload journey upload a pdf file 1`] = `
+<div>
+  <div>
+    <div
+      class="form-container"
+    >
+      <div>
+        <label>
+          File Uploader
+        </label>
+      </div>
+      <input
+        data-testid="file-input"
+        multiple=""
+        type="file"
+      />
+    </div>
+    <div
+      class="file-viewer-container"
+    >
+      <div
+        class="listing"
+      >
+        <h4>
+          List of Selected Files
+        </h4>
+        <ul
+          data-testid="listing"
+        >
+          <li
+            class=" active "
+          >
+            <p>
+              test-pdf.pdf
+               (Click to View) 
+            </p>
+          </li>
+          <li
+            class="  "
+          >
+            <p>
+              test-pdf.pdf
+               (Click to View) 
+            </p>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="viewer"
+        data-testid="viewer"
+      >
+        <div>
+          <div>
+            <h4>
+              Options
+            </h4>
+          </div>
+          <button
+            type="button"
+          >
+             
+            Enable
+             Thumbnail
+          </button>
+          <button
+            type="button"
+          >
+             
+            Enable
+             Rotation
+          </button>
+          <button
+            type="button"
+          >
+             
+            Disable
+             Default Layout
+          </button>
+          <button
+            type="button"
+          >
+             
+            Disable
+             Reading Progress
+          </button>
+          <button
+            type="button"
+          >
+             
+            Disable
+             Download
+          </button>
+          <button
+            type="button"
+          >
+            Print
+          </button>
+          <button
+            type="button"
+          >
+             
+            Disable
+             Zoom Level
+          </button>
+          <div>
+            <h5>
+              Zoom Options
+            </h5>
+            <select>
+              <option
+                value="ActualSize"
+              >
+                Actual Size
+              </option>
+              <option
+                value="PageFit"
+              >
+                Page Fit
+              </option>
+              <option
+                value="PageWidth"
+              >
+                Page Width
+              </option>
+              <option
+                value="0.5"
+              >
+                50%
+              </option>
+              <option
+                value="1"
+              >
+                100%
+              </option>
+              <option
+                value="2"
+              >
+                200%
+              </option>
+            </select>
+          </div>
+        </div>
+        <button
+          style="background-color: rgb(53, 126, 221); border-radius: 4px; color: rgb(255, 255, 255); cursor: pointer; padding: 8px;"
+        >
+          Download
+        </button>
+        <div
+          class="rpv-core__viewer rpv-core__viewer--light"
+          data-testid="core__viewer"
+          style="height: 100%; width: 100%;"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
