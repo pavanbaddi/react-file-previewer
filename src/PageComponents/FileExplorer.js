@@ -11,7 +11,8 @@ export default function FileExplorer({files, prevFile, prevChoosenFile}) {
                   {files.map((file, index) => {
                     const {file : uploadedFile, url} = file;
                     const isActive = prevFile === file
-                    return <li data-testid={`listing-li-${index}`} className={` ${isActive ? 'active' : ''} `} key={index} onClick={() => prevChoosenFile(file)} >
+                    const key = `listing-li-${index}`
+                    return <li key={key} className={` ${isActive ? 'active' : ''} `} onClick={() => prevChoosenFile(file)} >
                       <p>{uploadedFile.name} (Click to View) </p>
                     </li>
                   } )}

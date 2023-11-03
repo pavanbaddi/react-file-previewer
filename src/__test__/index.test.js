@@ -31,7 +31,7 @@ describe("test upload journey", () => {
     });
 
     test("upload a pdf file", async () => {      
-        
+
         const observe = jest.fn();
         const unobserve = jest.fn();
         const disconnect = jest.fn();
@@ -59,7 +59,7 @@ describe("test upload journey", () => {
         const listing = await screen.findByTestId("listing")
         expect(listing.childElementCount).toBeGreaterThanOrEqual(1);
         
-        const firstListItem = screen.getByTestId("listing-li-0")
+        const firstListItem = listing.querySelector("li:first-child")
         fireEvent(firstListItem, new MouseEvent("click", {
             bubbles: true,
         }))
